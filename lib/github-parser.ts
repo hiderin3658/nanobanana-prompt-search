@@ -23,7 +23,7 @@ export async function fetchReadmeFromGitHub(
       Accept: "text/plain",
       "User-Agent": "NanoBanana-MCP-Server/1.0",
     },
-    next: { revalidate: 3600 }, // 1時間キャッシュ
+    next: { revalidate: 3600 } as any, // Next.js拡張のnextプロパティ
   });
 
   if (!response.ok) {

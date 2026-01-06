@@ -158,25 +158,28 @@ export async function getPromptCount(): Promise<number> {
   return info.vectorCount;
 }
 
-// カテゴリ別のプロンプト数を取得
+// カテゴリ別のプロンプト数を取得（並列化でパフォーマンス改善）
 export async function getPromptCountByCategory(): Promise<
   Record<CategoryId, number>
 > {
   const index = getVectorIndex();
-  const counts: Record<string, number> = {};
 
-  // 各カテゴリでクエリを実行してカウント
-  for (const category of CATEGORIES) {
+  // 各カテゴリのクエリを並列実行
+  const countPromises = CATEGORIES.map(async (category) => {
     const results = await index.query({
       data: " ", // ダミークエリ
       topK: 1000, // 最大数
       includeMetadata: false,
       filter: `category = '${category.id}'`,
     });
-    counts[category.id] = results.length;
-  }
+    return [category.id, results.length] as const;
+  });
 
-  return counts as Record<CategoryId, number>;
+  // 全てのクエリを並列実行し、結果を待つ
+  const counts = await Promise.all(countPromises);
+
+  // 配列をオブジェクトに変換
+  return Object.fromEntries(counts) as Record<CategoryId, number>;
 }
 
 // ヘルスチェック
