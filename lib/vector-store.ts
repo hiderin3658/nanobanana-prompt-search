@@ -111,6 +111,7 @@ export async function searchPrompts(
       sourceUrl: metadata.sourceUrl,
       score: result.score,
       imageUrl: metadata.imageUrl || undefined,
+      description: metadata.description || undefined,
     };
   });
 }
@@ -141,6 +142,7 @@ export async function getPromptById(
     sourceUrl: metadata.sourceUrl,
     score: 1.0, // fetchの場合はスコアなし
     imageUrl: metadata.imageUrl || undefined,
+    description: metadata.description || undefined,
   };
 }
 

@@ -99,12 +99,26 @@ async function main() {
     }
     console.log();
 
-    // サンプルプロンプトを表示
-    console.log("📝 サンプルプロンプト（最初の3件）:");
-    for (const prompt of prompts.slice(0, 3)) {
-      console.log(`   [${prompt.id}] ${prompt.title}`);
-      console.log(`       カテゴリ: ${prompt.category}`);
-      console.log(`       プロンプト: ${prompt.prompt.substring(0, 50)}...`);
+    // サンプルプロンプトを表示（各データソースから1件ずつ）
+    console.log("📝 サンプルプロンプト:");
+
+    // YouMindから1件
+    const youmindPrompt = prompts.find(p => p.id.startsWith("youmind-"));
+    if (youmindPrompt) {
+      console.log(`   [${youmindPrompt.id}] ${youmindPrompt.title}`);
+      console.log(`       カテゴリ: ${youmindPrompt.category}`);
+      console.log(`       説明: ${youmindPrompt.description || "なし"}`);
+      console.log(`       言語: ${youmindPrompt.language}`);
+      console.log();
+    }
+
+    // ZeroLuから1件
+    const zeroluPrompt = prompts.find(p => p.id.startsWith("zerolu-"));
+    if (zeroluPrompt) {
+      console.log(`   [${zeroluPrompt.id}] ${zeroluPrompt.title}`);
+      console.log(`       カテゴリ: ${zeroluPrompt.category}`);
+      console.log(`       説明: ${zeroluPrompt.description || "なし"}`);
+      console.log(`       言語: ${zeroluPrompt.language}`);
       console.log();
     }
 

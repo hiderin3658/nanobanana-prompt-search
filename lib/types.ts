@@ -84,6 +84,7 @@ export interface SearchResultItem {
   sourceUrl: string;
   score: number;
   imageUrl?: string;
+  description?: string;
 }
 
 // search_prompts ツールのパラメータ
@@ -134,6 +135,13 @@ export interface GitHubRepoConfig {
 
 // データソース設定
 export const DATA_SOURCES: GitHubRepoConfig[] = [
+  {
+    owner: "YouMind-OpenLab",
+    repo: "awesome-nano-banana-pro-prompts",
+    branch: "main",
+    filePath: "README_ja-JP.md",
+    sourceId: "youmind",
+  },
   {
     owner: "ZeroLu",
     repo: "awesome-nanobanana-pro",
