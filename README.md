@@ -211,7 +211,8 @@ Claude Desktopで以下のように質問してみてください：
 | コマンド | 説明 |
 |---------|------|
 | `npm run dev` | 開発サーバー起動（HTTP） |
-| `npm run build` | プロダクションビルド（HTTP + stdio） |
+| `npm run build` | プロダクションビルド（HTTP のみ、Vercel用） |
+| `npm run build:all` | 完全ビルド（HTTP + stdio） |
 | `npm run build:mcp` | stdioサーバービルドのみ |
 | `npm run start` | プロダクションサーバー起動 |
 | `npm run mcp` | stdioサーバー起動（ローカルテスト用） |

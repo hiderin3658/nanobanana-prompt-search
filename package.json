@@ -9,7 +9,8 @@
   },
   "scripts": {
     "dev": "next dev",
-    "build": "next build && npm run build:mcp",
+    "build": "next build",
+    "build:all": "npm run build && npm run build:mcp",
     "build:mcp": "tsc --project tsconfig.mcp.json",
     "start": "next start",
     "lint": "next lint",
