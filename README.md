@@ -113,8 +113,15 @@ curl http://localhost:3000/api/health
    - `UPSTASH_VECTOR_REST_TOKEN`
 6. 「Deploy」をクリック
 
-## 🔌 Claude.aiへの登録
+## 🔌 MCPクライアントでの使用
 
+このプロジェクトは2つのプロトコルをサポートしています：
+
+### 🌐 Claude.ai Integrations（Streamable HTTP）
+
+**対応クライアント**: Claude.ai Web版
+
+**登録手順**:
 1. [Claude.ai](https://claude.ai) にログイン（Pro/Max/Team/Enterprise）
 2. 左下の「⚙️」→「Integrations」
 3. 「Add custom connector」をクリック
@@ -123,15 +130,91 @@ curl http://localhost:3000/api/health
    - **URL**: `https://your-project.vercel.app/api/mcp`
 5. 「追加」をクリック
 
+### 💻 Claude Desktop / Cursor（stdio）
+
+**対応クライアント**: Claude Desktop, Cursor（※Cursorは実験的）
+
+#### セットアップ手順
+
+**1. プロジェクトをクローン**
+```bash
+git clone https://github.com/yourusername/nanobanana-prompt-search.git
+cd nanobanana-prompt-search
+```
+
+**2. 依存関係インストール＆ビルド**
+```bash
+npm install
+npm run build:mcp
+```
+
+**3. 環境変数設定**
+
+`.env.local` ファイルを作成：
+```bash
+UPSTASH_VECTOR_REST_URL=https://xxx.upstash.io
+UPSTASH_VECTOR_REST_TOKEN=xxx
+```
+
+**4. Claude Desktop設定**
+
+Claude Desktopの設定ファイルを編集：
+
+**macOS**:
+```bash
+code ~/Library/Application\ Support/Claude/claude_desktop_config.json
+```
+
+**Windows**:
+```bash
+code %APPDATA%\Claude\claude_desktop_config.json
+```
+
+**設定内容**:
+```json
+{
+  "mcpServers": {
+    "nano-banana-prompts": {
+      "command": "node",
+      "args": [
+        "/absolute/path/to/nanobanana-prompt-search/dist/bin/mcp-server.js"
+      ],
+      "env": {
+        "UPSTASH_VECTOR_REST_URL": "https://xxx.upstash.io",
+        "UPSTASH_VECTOR_REST_TOKEN": "xxx"
+      }
+    }
+  }
+}
+```
+
+**重要**:
+- `/absolute/path/to/` を実際のプロジェクトパスに置き換えてください
+- Windows の場合は `C:\\Users\\...\\dist\\bin\\mcp-server.js` のように記載
+
+**5. Claude Desktop を再起動**
+
+設定完了後、Claude Desktop を再起動すると、MCPサーバーが利用可能になります。
+
+#### 動作確認
+
+Claude Desktopで以下のように質問してみてください：
+
+```
+商品写真を撮りたいんだけど、おすすめのプロンプトを探して
+```
+
 ## 🛠️ 開発
 
 ### コマンド一覧
 
 | コマンド | 説明 |
 |---------|------|
-| `npm run dev` | 開発サーバー起動 |
-| `npm run build` | プロダクションビルド |
+| `npm run dev` | 開発サーバー起動（HTTP） |
+| `npm run build` | プロダクションビルド（HTTP + stdio） |
+| `npm run build:mcp` | stdioサーバービルドのみ |
 | `npm run start` | プロダクションサーバー起動 |
+| `npm run mcp` | stdioサーバー起動（ローカルテスト用） |
 | `npm run lint` | ESLintチェック |
 | `npm run type-check` | TypeScript型チェック |
 | `npm run seed` | 初期データ投入 |
@@ -144,9 +227,11 @@ curl http://localhost:3000/api/health
 nanobanana-prompt-search/
 ├── app/
 │   └── api/
-│       ├── mcp/route.ts        # MCPエンドポイント
+│       ├── mcp/route.ts        # MCPエンドポイント（HTTP）
 │       ├── sync/route.ts       # データ同期API
 │       └── health/route.ts     # ヘルスチェック
+├── bin/
+│   └── mcp-server.ts           # MCPエンドポイント（stdio）
 ├── lib/
 │   ├── github-parser.ts        # GitHubデータパーサー
 │   ├── vector-store.ts         # Upstash Vector操作

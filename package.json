@@ -3,13 +3,19 @@
   "version": "1.0.0",
   "description": "Nano Banana Pro プロンプト検索 MCPサーバー",
   "private": true,
+  "type": "module",
+  "bin": {
+    "nanobanana-prompt-search": "./dist/bin/mcp-server.js"
+  },
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "next build && npm run build:mcp",
+    "build:mcp": "tsc --project tsconfig.mcp.json",
     "start": "next start",
     "lint": "next lint",
     "type-check": "tsc --noEmit",
-    "seed": "npx ts-node --project tsconfig.scripts.json scripts/seed-data.ts"
+    "seed": "npx ts-node --project tsconfig.scripts.json scripts/seed-data.ts",
+    "mcp": "node dist/bin/mcp-server.js"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.0.0",
