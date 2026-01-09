@@ -123,8 +123,8 @@ curl http://localhost:3000/api/health
 
 **登録手順**:
 1. [Claude.ai](https://claude.ai) にログイン（Pro/Max/Team/Enterprise）
-2. 左下の「⚙️」→「Integrations」
-3. 「Add custom connector」をクリック
+2. 左下の「⚙️」→「コネクタ」
+3. 「カスタムコネクタを追加」をクリック
 4. 入力：
    - **名前**: `Nano Banana Prompts`
    - **URL**: `https://your-project.vercel.app/api/mcp`
@@ -132,9 +132,53 @@ curl http://localhost:3000/api/health
 
 ### 💻 Claude Desktop / Cursor（stdio）
 
-**対応クライアント**: Claude Desktop, Cursor（※Cursorは実験的）
+**対応クライアント**: Claude Desktop, Cursor
 
-#### セットアップ手順
+このプロジェクトは2つの接続方法に対応しています：
+
+#### 方法1：リモートHTTP接続（推奨・最も簡単）
+
+VercelにデプロイされたサーバーにHTTP経由で接続する方法です。ローカルビルドが不要で、設定ファイルの記述だけで利用できます。
+
+**Claude Desktop / Cursor の設定ファイルを編集：**
+
+**macOS**:
+```bash
+code ~/Library/Application\ Support/Claude/claude_desktop_config.json
+```
+
+**Windows**:
+```bash
+code %APPDATA%\Claude\claude_desktop_config.json
+```
+
+**Cursor**:
+```bash
+# macOS
+code ~/.cursor/config.json
+
+# Windows
+code %APPDATA%\Cursor\config.json
+```
+
+**設定内容（リモート接続）**:
+```json
+{
+  "mcpServers": {
+    "nanobanana-prompt-search": {
+      "url": "https://nanobanana-prompt-search.vercel.app/api/mcp"
+    }
+  }
+}
+```
+
+**Claude Desktop / Cursor を再起動**して設定完了です。
+
+---
+
+#### 方法2：ローカルstdio接続（上級者向け）
+
+ローカルでプロジェクトをビルドして、stdio経由で接続する方法です。
 
 **1. プロジェクトをクローン**
 ```bash
@@ -170,7 +214,7 @@ code ~/Library/Application\ Support/Claude/claude_desktop_config.json
 code %APPDATA%\Claude\claude_desktop_config.json
 ```
 
-**設定内容**:
+**設定内容（stdio接続）**:
 ```json
 {
   "mcpServers": {
@@ -196,9 +240,11 @@ code %APPDATA%\Claude\claude_desktop_config.json
 
 設定完了後、Claude Desktop を再起動すると、MCPサーバーが利用可能になります。
 
+---
+
 #### 動作確認
 
-Claude Desktopで以下のように質問してみてください：
+Claude Desktop / Cursor で以下のように質問してみてください：
 
 ```
 商品写真を撮りたいんだけど、おすすめのプロンプトを探して
